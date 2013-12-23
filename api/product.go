@@ -33,9 +33,8 @@ type DateTime struct {
 
 func (dt *DateTime) UnmarshalJSON(value []byte) error {
     s := string(value[1 : len(value) - 1])
-    fmt.Println(s)
 
-    re := regexp.MustCompile("^\\/Date\\((-?[0-9]+)\\)\\/")
+    re := regexp.MustCompile(`^\\?\/Date\((-?[0-9]+)\)\\?\/`)
     md := re.FindStringSubmatch(s)
     if md == nil {
         return errors.New("Invalid DateTime string")

@@ -28,6 +28,14 @@ func (s *ProductSuite) TestDateTime(c *C) {
     c.Assert(dt.ms, Equals, int64(1378686019420))
 }
 
+func (s *ProductSuite) TestDateTimeEscaped(c *C) {
+    var dt DateTime
+    err := json.Unmarshal([]byte(`"\/Date(1378686019420)\/"`), &dt)
+
+    c.Assert(err, IsNil)
+    c.Assert(dt.ms, Equals, int64(1378686019420))
+}
+
 func (s *ProductSuite) TestProduct(c *C) {
     var p Product
     err := json.Unmarshal(productExample(), &p)
@@ -37,8 +45,6 @@ func (s *ProductSuite) TestProduct(c *C) {
     c.Assert(p.ProductCode, Equals, "_TEST01")
     c.Assert(p.SellPriceTier1.Name, Equals, "RRP")
     c.Assert(p.SellPriceTier1.Value, Equals, "15.0000")
-
-    log.Println(p.ProductGroup)
 }
 
 
@@ -123,7 +129,7 @@ func productExample() []byte {
         "CreatedBy": "admin@example.com",
         "SourceVariantParentId": null,
         "Guid": "76b4e5d4-ff42-4785-93c5-a69a2980752d",
-        "LastModifiedOn": "/Date(1378686019420)/"
+        "LastModifiedOn": "\/Date(1378686019420)\/"
     }`)
 
     return p
