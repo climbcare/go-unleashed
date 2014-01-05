@@ -99,6 +99,18 @@ type Product struct {
       XeroTaxRate float32
 }
 
+type Pagination struct {
+    NumberOfItems int
+    PageSize      int
+    PageNumber    int
+    NumberOfPages int
+}
+
+type ProductPagination struct {
+    Pagination Pagination
+    Items      []Product
+}
+
 type ProductGroup struct {
     Guid      *Guid
     GroupName string

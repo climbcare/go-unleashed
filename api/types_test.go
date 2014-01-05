@@ -4,23 +4,24 @@ import (
     . "launchpad.net/gocheck"
 
     "encoding/json"
+    "fmt"
     "log"
 )
 
 var _ = log.Println
 
 
-type ProductSuite struct{}
-var _ = Suite(&ProductSuite{})
+type TypesSuite struct{}
+var _ = Suite(&TypesSuite{})
 
-func (s *ProductSuite) TestGuid(c *C) {
+func (s *TypesSuite) TestGuid(c *C) {
     var guid Guid
     err := json.Unmarshal([]byte(`"76b4e5d4-ff42-4785-93c5-a69a2980752d"`), &guid)
 
     c.Assert(err, IsNil)
 }
 
-func (s *ProductSuite) TestDateTime(c *C) {
+func (s *TypesSuite) TestDateTime(c *C) {
     var dt DateTime
     err := json.Unmarshal([]byte(`"/Date(1378686019420)/"`), &dt)
 
@@ -28,7 +29,7 @@ func (s *ProductSuite) TestDateTime(c *C) {
     c.Assert(dt.ms, Equals, int64(1378686019420))
 }
 
-func (s *ProductSuite) TestDateTimeEscaped(c *C) {
+func (s *TypesSuite) TestDateTimeEscaped(c *C) {
     var dt DateTime
     err := json.Unmarshal([]byte(`"\/Date(1378686019420)\/"`), &dt)
 
@@ -36,7 +37,7 @@ func (s *ProductSuite) TestDateTimeEscaped(c *C) {
     c.Assert(dt.ms, Equals, int64(1378686019420))
 }
 
-func (s *ProductSuite) TestProduct(c *C) {
+func (s *TypesSuite) TestProduct(c *C) {
     var p Product
     err := json.Unmarshal(productExample(), &p)
 
@@ -47,6 +48,29 @@ func (s *ProductSuite) TestProduct(c *C) {
     c.Assert(p.SellPriceTier1.Value, Equals, "15.0000")
 }
 
+func (s *TypesSuite) TestProductPagination(c *C) {
+    var pg ProductPagination
+    err := json.Unmarshal(paginationExample(), &pg)
+    c.Assert(err, IsNil)
+
+    log.Println(pg.Pagination)
+}
+
+
+func paginationExample() []byte {
+    pgtmpl := fmt.Sprintf(`{
+        "Pagination": {
+            "NumberOfPages": 2,
+            "PageNumber": 1,
+            "NumberOfItems": 2,
+            "PageSize": 1
+        },
+        "Items": [
+            %s
+        ]}`,
+        productExample())
+    return []byte(pgtmpl)
+}
 
 func productExample() []byte {
     p := []byte(`{
