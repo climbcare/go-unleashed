@@ -17,14 +17,12 @@ var _ = Suite(&TypesSuite{})
 func (s *TypesSuite) TestGuid(c *C) {
     var guid Guid
     err := json.Unmarshal([]byte(`"76b4e5d4-ff42-4785-93c5-a69a2980752d"`), &guid)
-
     c.Assert(err, IsNil)
 }
 
 func (s *TypesSuite) TestDateTime(c *C) {
     var dt DateTime
     err := json.Unmarshal([]byte(`"/Date(1378686019420)/"`), &dt)
-
     c.Assert(err, IsNil)
     c.Assert(dt.ms, Equals, int64(1378686019420))
 }
@@ -32,7 +30,6 @@ func (s *TypesSuite) TestDateTime(c *C) {
 func (s *TypesSuite) TestDateTimeEscaped(c *C) {
     var dt DateTime
     err := json.Unmarshal([]byte(`"\/Date(1378686019420)\/"`), &dt)
-
     c.Assert(err, IsNil)
     c.Assert(dt.ms, Equals, int64(1378686019420))
 }
@@ -40,9 +37,7 @@ func (s *TypesSuite) TestDateTimeEscaped(c *C) {
 func (s *TypesSuite) TestProduct(c *C) {
     var p Product
     err := json.Unmarshal(productExample(), &p)
-
     c.Assert(err, IsNil)
-
     c.Assert(p.ProductCode, Equals, "_TEST01")
     c.Assert(p.SellPriceTier1.Name, Equals, "RRP")
     c.Assert(p.SellPriceTier1.Value, Equals, "15.0000")
@@ -52,8 +47,12 @@ func (s *TypesSuite) TestProductPagination(c *C) {
     var pg ProductPagination
     err := json.Unmarshal(paginationExample(), &pg)
     c.Assert(err, IsNil)
+    c.Assert(pg.Pagination.PageNumber, Equals, 1)
+    c.Assert(pg.Pagination.PageSize, Equals, 1)
 
-    log.Println(pg.Pagination)
+    c.Assert(pg.Items[0], NotNil)
+    p := pg.Items[0]
+    c.Assert(p.ProductCode, Equals, "_TEST01")
 }
 
 
