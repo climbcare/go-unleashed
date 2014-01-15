@@ -26,7 +26,7 @@ func (s *TransportSuite) SetUpSuite(c *C) {
     s.credentials.ApiId = fakeId.String()
 
     // Make API Key
-    b := make([]byte, 96)
+    b := make([]byte, 96 * 8)
     _, err = rand.Read(b)
     c.Assert(err, IsNil)
     s.credentials.ApiKey = string(b)

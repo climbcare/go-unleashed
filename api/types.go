@@ -13,6 +13,12 @@ type Guid struct {
     guid *uuid.UUID
 }
 
+func NewGuid(guid string) (g *Guid, err error) {
+    g = new(Guid)
+    g.guid, err = uuid.ParseHex(guid)
+    return g, err
+}
+
 func (g *Guid) UnmarshalJSON(value []byte) (err error) {
     buffer := string(value[1 : len(value) - 1])  // value is quoted
     g.guid, err = uuid.ParseHex(buffer)
@@ -106,14 +112,10 @@ type Pagination struct {
     NumberOfPages int
 }
 
-type ProductPagination struct {
-    Pagination Pagination
-    Items      []Product
-}
-
 type ProductGroup struct {
-    Guid      *Guid
-    GroupName string
+    Guid           *Guid
+    GroupName      string
+    LastModifiedOn DateTime
 }
 
 func (pg ProductGroup) String() string {

@@ -44,7 +44,10 @@ func (s *TypesSuite) TestProduct(c *C) {
 }
 
 func (s *TypesSuite) TestProductPagination(c *C) {
-    var pg ProductPagination
+    var pg struct {
+        Pagination Pagination
+        Items []Product
+    }
     err := json.Unmarshal(paginationExample(), &pg)
     c.Assert(err, IsNil)
     c.Assert(pg.Pagination.PageNumber, Equals, 1)
@@ -54,7 +57,6 @@ func (s *TypesSuite) TestProductPagination(c *C) {
     p := pg.Items[0]
     c.Assert(p.ProductCode, Equals, "_TEST01")
 }
-
 
 func paginationExample() []byte {
     pgtmpl := fmt.Sprintf(`{
