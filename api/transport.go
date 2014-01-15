@@ -7,8 +7,8 @@ import (
 )
 
 const (
-    schemeName = "unleashed"
-    schemePrefix = "unleashed://"
+    SchemeName = "unleashed"
+    SchemePrefix = "unleashed://"
 )
 
 type UnleashedTransport struct {
@@ -29,7 +29,7 @@ func (t *UnleashedTransport) RoundTrip(req *http.Request) (resp *http.Response, 
 
 func (t *UnleashedTransport) rewriteURL(req *http.Request) {
     var err error
-    request := strings.Replace(req.URL.String(), schemePrefix, t.apiUrl, 1)
+    request := strings.Replace(req.URL.String(), SchemePrefix, t.apiUrl, 1)
     req.URL, err = url.Parse(request)
     if err != nil {
         panic(err)
@@ -45,6 +45,6 @@ func (t *UnleashedTransport) signRequest(req *http.Request) {
 
 func (t *UnleashedTransport) NewClient() *http.Client {
     transport := new(http.Transport)
-    transport.RegisterProtocol(schemeName, t)
+    transport.RegisterProtocol(SchemeName, t)
     return &http.Client{Transport: transport}
 }

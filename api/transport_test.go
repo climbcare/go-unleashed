@@ -17,7 +17,6 @@ type TransportSuite struct {
     credentials *Credentials
 }
 
-
 func (s *TransportSuite) SetUpSuite(c *C) {
     s.credentials = new(Credentials)
 
